@@ -6,11 +6,12 @@ local SE = require 'lib.samp.events'
 local imgui = require 'imgui'
 
 showConfigMenu = imgui.ImBool(false)
-disableLabels = imgui.ImBool(true)
-signStop = imgui.ImBool(true)
-disableUIFOverlay = imgui.ImBool(true)
-disableScoreOverlay = imgui.ImBool(true)
-disableActors = imgui.ImBool(true)
+
+disableLabels = imgui.ImBool(true) -- change the (true) to (false) to LOAD labels by default.
+disableSigns = imgui.ImBool(true) -- change the (true) to (false) to LOAD 3D labels by default.
+disableUIFOverlay = imgui.ImBool(true) -- change the (true) to (false) to LOAD bottom uif overlay by default.
+disableScoreOverlay = imgui.ImBool(true) -- change the (true) to (false) to LOAD top score overlay by default.
+disableActors = imgui.ImBool(true) -- change the (true) to (false) to LOAD actors by default.
 
 function imgui.OnDrawFrame()
 	if showConfigMenu.v then
@@ -18,7 +19,7 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
 		imgui.Begin('UIF Configurator', showConfigMenu)
 		imgui.Checkbox('Disable Labels', disableLabels)
-		imgui.Checkbox('Disable 3D Signs', signStop)
+		imgui.Checkbox('Disable 3D Signs', disableSigns)
 		imgui.Checkbox('Disable Actors', disableActors)
 		imgui.Checkbox('Disable UIF Overlay', disableUIFOverlay)
 		imgui.Checkbox('Disable Score Overlay', disableScoreOverlay)
@@ -70,7 +71,7 @@ function SE.onCreate3DText(id, color, position, distance, testLOS, attachedPlaye
 end
 
 function SE.onSetObjectMaterialText(id, data) 
-		if (data.fontColor ~= -16711936 and data.materialSize==120 and signStop.v) then
+		if (data.fontColor ~= -16711936 and data.materialSize==120 and disableSigns.v) then
 		return false
 	end
 end
