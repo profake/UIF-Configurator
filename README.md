@@ -27,7 +27,7 @@ Put the __UIF Configurator.lua__ file from this repository to your Moonloader fo
 
 ### [Extra]
 <p>There is a part in the script that disables all group zones from showing in the radar.</p>
-<p>It is commented out in the script that looks like <b>--[[ code --]]</b>. Delete the --[[ and --]] to have this feature. As of now, it's not possible to turn it ON/OFF in-game unless you restart the game, which is why I've turned it off by default.</p>
+<p>It is commented out in the script that looks like <b>--[[ code --]]</b>. Delete the --[[ and --]] to have this feature. As of now, it's not possible to turn it ON/OFF in-game unless you restart the game, which is why I've disabled this bit by default.</p>
 
 ### [Credits]
 <p>FYP for Moonloader, SAMP addon and ImGui port for Moonloader.</p>
