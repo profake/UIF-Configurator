@@ -21,8 +21,8 @@ Put the __UIF Configurator.lua__ file from this repository to your Moonloader fo
 <p>Example: <b>disableActors = imgui.ImBool(false)</b> will set VIP Actors to <b>ON</b> by default.</p>
 
 ### [Known issues]
-1.Some 3D labels still spawn. I do plan on trying to fix them, just haven't gotten around to it yet.
-2.Except for the top and bottom overlay text, everything else will not take effect unless you reload the scene. I.E: If you have labels disabled, and decide to see what labels there are in your vicinity, you will have to enable labels, and then teleport somewhere else and come back to where you were to reload them. Same goes for the others.
+1. Some 3D labels still spawn. I do plan on trying to fix them, just haven't gotten around to it yet.
+2. Except for the top and bottom overlay text, everything else will not take effect unless you reload the scene. I.E: If you have labels disabled, and decide to see what labels there are in your vicinity, you will have to enable labels, and then teleport somewhere else and come back to where you were to reload them. Same goes for the others.
 3. Houses don't have labels. This can probably be fixed as well.
 
 ### [Extra]
