@@ -8,7 +8,7 @@
 1. ASI Loader
 2. Moonloader
 3. SAMPFuncs
-4. Dear ImGUI for Moonloader
+4. mimgui for Moonloader
 
 ### [Installation]
 Put the __UIF Configurator.lua__ file from this repository to your Moonloader folder.
