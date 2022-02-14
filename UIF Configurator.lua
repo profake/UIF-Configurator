@@ -3,87 +3,71 @@ script_author('Nasif')
 require "lib.moonloader"
 
 local SE = require 'lib.samp.events'
-local imgui = require 'imgui'
+local imgui = require 'mimgui'
+local new = imgui.new
+local sizeX, sizeY = getScreenResolution()
 
-showConfigMenu = imgui.ImBool(false)
+showConfigMenu = new.bool()
+disableLabels = new.bool()
+signStop = new.bool()
+disableUIFOverlay = new.bool()
+disableScoreOverlay = new.bool()
+disableActors = new.bool()
 
-disableLabels = imgui.ImBool(true) -- change the (true) to (false) to LOAD labels by default.
-disableSigns = imgui.ImBool(true) -- change the (true) to (false) to LOAD 3D labels by default.
-disableUIFOverlay = imgui.ImBool(true) -- change the (true) to (false) to LOAD bottom uif overlay by default.
-disableScoreOverlay = imgui.ImBool(true) -- change the (true) to (false) to LOAD top score overlay by default.
-disableActors = imgui.ImBool(true) -- change the (true) to (false) to LOAD actors by default.
-
-function imgui.OnDrawFrame()
-	if showConfigMenu.v then
-		imgui.SetNextWindowPos(imgui.ImVec2(imgui.GetIO().DisplaySize.x / 2, imgui.GetIO().DisplaySize.y / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
+local newFrame = imgui.OnFrame(
+	function() return showConfigMenu[0] end,
+    function(player)	
+		imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(220, 200), imgui.Cond.FirstUseEver)
 		imgui.Begin('UIF Configurator', showConfigMenu)
 		imgui.Checkbox('Disable Labels', disableLabels)
-		imgui.Checkbox('Disable 3D Signs', disableSigns)
+		imgui.Checkbox('Disable 3D Signs', signStop)
 		imgui.Checkbox('Disable Actors', disableActors)
 		imgui.Checkbox('Disable UIF Overlay', disableUIFOverlay)
 		imgui.Checkbox('Disable Score Overlay', disableScoreOverlay)
-		imgui.End()
+		imgui.End() 
 	end
-end
+)
 
 function main()
-	while not isSampAvailable() do wait(100) end
+	while not isSampAvailable() do wait(0) end
 	
 	if sampGetCurrentServerAddress() ~= "51.254.85.134" then return end
 	
 	sampRegisterChatCommand("config", configMenu)
-	
-	while not sampTextdrawIsExists(0) do wait (0) end
-	posX, posY = sampTextdrawGetPos(0)
-	
-	while not sampTextdrawIsExists(2049) do wait (0) end
-	posXX, posYY = sampTextdrawGetPos(2049)
-	
-	while true do
-		wait (0)
-		imgui.Process = showConfigMenu.v
 		
-		if disableUIFOverlay.v then
-			sampTextdrawSetPos(0, posX, posY+500)
-		else
-			sampTextdrawSetPos(0, posX, posY)
-		end
-		
-		if disableScoreOverlay.v then
-			sampTextdrawSetPos(2049, posXX, posYY+500)
-		else
-			sampTextdrawSetPos(2049, posXX, posYY)
-		end
-		
+end
+
+function SE.onSetPlayerHealth(health)
+	if(health>200) then
+		displayHud(false)
+	else
+		displayHud(true)
 	end
-	
 end
 
 function configMenu()
-	showConfigMenu.v = not showConfigMenu.v
+	showConfigMenu[0] = not showConfigMenu[0]
 end
 
 function SE.onCreate3DText(id, color, position, distance, testLOS, attachedPlayerId, attachedVehicleId, text)	
-	if(attachedPlayerId == 65535 and disableLabels.v) then
+	if(attachedPlayerId == 65535 and disableLabels[0]) then
 		return false
 	end
 end
 
 function SE.onSetObjectMaterialText(id, data) 
-		if (data.fontColor ~= -16711936 and data.materialSize==120 and disableSigns.v) then
+		if (data.fontColor ~= -16711936 and data.materialSize==120 and signStop[0]) then
 		return false
 	end
 end
 
---[[
-function SE.onCreateGangZone(zoneId, squareStart, squareEnd, color)
+function SE.onSetPlayerName(zoneId, squareStart, squareEnd, color)
 	return false 
 end
---]]
 
 function SE.onCreateActor(id, skin, pos, angle, hp)
-	if(disableActors.v) then
+	if(disableActors[0]) then
 		return false
 	end
 end
