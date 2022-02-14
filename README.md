@@ -17,8 +17,8 @@ Put the __UIF Configurator.lua__ file from this repository to your Moonloader fo
 ![In-game Menu](https://i.imgur.com/G3qpCgD.png)
 
 <p>Use <b>/config</b> in-game to show the configurator.</p>
-<p>If you want to set any of the options to <b>OFF</b> by default, open the <b>UIF Configurator.lua</b> file and change the corresponding variable on top of the script.</p>
-<p>Example: <b>disableActors = imgui.ImBool(false)</b> will set VIP Actors to <b>ON</b> by default.</p>
+<p>If you want to set any of the options to <b>ON/OFF</b> by default, open the <b>UIF Configurator.lua</b> file and change the corresponding variable on top of the script.</p>
+<p>Example: <b>hideHudWhenGod = new.bool(true)</b> will set hiding of hud to <b>ON</b> by default.</p>
 
 ### [Known issues]
 1. Some 3D labels still spawn. I do plan on trying to fix them, just haven't gotten around to it yet.
