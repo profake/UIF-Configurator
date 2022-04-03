@@ -2,17 +2,29 @@ script_name('UIF Configurator')
 script_author('Nasif')
 require "lib.moonloader"
 
+local inicfg = require 'inicfg'
 local SE = require 'lib.samp.events'
 local imgui = require 'mimgui'
 local new = imgui.new
 local sizeX, sizeY = getScreenResolution()
 
+-- IniCfg
+local mainIni = inicfg.load({
+    settings = {
+	  disableLabels = false,
+      signStop = false,
+      disableUIFServerOverlay = false,
+      disableActors = false,
+      hideHudWhenGod = false,
+    }
+  })
+
 showConfigMenu = new.bool()
-disableLabels = new.bool()
-signStop = new.bool()
-disableUIFOverlay = new.bool()
-disableScoreOverlay = new.bool()
-disableActors = new.bool()
+disableLabels = new.bool(mainIni.settings.disableLabels)
+signStop = new.bool(mainIni.settings.signStop)
+disableUIFServerOverlay = new.bool(mainIni.settings.disableUIFServerOverlay)
+disableActors = new.bool(mainIni.settings.disableActors)
+hideHudWhenGod = new.bool(mainIni.settings.hideHudWhenGod)
 
 local newFrame = imgui.OnFrame(
 	function() return showConfigMenu[0] end,
@@ -21,10 +33,16 @@ local newFrame = imgui.OnFrame(
 		imgui.SetNextWindowSize(imgui.ImVec2(220, 200), imgui.Cond.FirstUseEver)
 		imgui.Begin('UIF Configurator', showConfigMenu)
 		imgui.Checkbox('Disable Labels', disableLabels)
+		mainIni.settings.disableLabels = disableLabels[0]
 		imgui.Checkbox('Disable 3D Signs', signStop)
+		mainIni.settings.signStop = signStop[0]
 		imgui.Checkbox('Disable Actors', disableActors)
-		imgui.Checkbox('Disable UIF Overlay', disableUIFOverlay)
-		imgui.Checkbox('Disable Score Overlay', disableScoreOverlay)
+		mainIni.settings.disableActors = disableActors[0]
+		imgui.Checkbox('Disable UIF Overlay', disableUIFServerOverlay)
+		mainIni.settings.disableUIFServerOverlay = disableUIFServerOverlay[0]
+		imgui.Checkbox('Hide hud when in God mode', hideHudWhenGod)
+		mainIni.settings.hideHudWhenGod = hideHudWhenGod[0]
+		inicfg.save(mainIni)
 		imgui.End() 
 	end
 )
@@ -35,11 +53,11 @@ function main()
 	if sampGetCurrentServerAddress() ~= "51.254.85.134" then return end
 	
 	sampRegisterChatCommand("config", configMenu)
-		
+	
 end
 
 function SE.onSetPlayerHealth(health)
-	if(health>200) then
+	if (health > 200 and hideHudWhenGod[0]) then
 		displayHud(false)
 	else
 		displayHud(true)
@@ -51,9 +69,10 @@ function configMenu()
 end
 
 function SE.onCreate3DText(id, color, position, distance, testLOS, attachedPlayerId, attachedVehicleId, text)	
-	if(attachedPlayerId == 65535 and disableLabels[0]) then
+	if (attachedPlayerId == 65535 and disableLabels[0]) then
 		return false
 	end
+	
 end
 
 function SE.onSetObjectMaterialText(id, data) 
@@ -62,12 +81,8 @@ function SE.onSetObjectMaterialText(id, data)
 	end
 end
 
-function SE.onSetPlayerName(zoneId, squareStart, squareEnd, color)
-	return false 
-end
-
 function SE.onCreateActor(id, skin, pos, angle, hp)
-	if(disableActors[0]) then
+	if (disableActors[0]) then
 		return false
 	end
 end
